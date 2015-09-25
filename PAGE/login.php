@@ -41,7 +41,7 @@
 				$login_accepted = "You've logged in with".$email;
 				
 				$password_hash = has("sha512", $password);
-				$stmt = $mysqli->prepare("SELECT id FROM user_info WHERE email=? and password=?");
+				$stmt = $mysqli->prepare("SELECT id FROM user_info WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash);
 				//vastuse muutujatesse
 				$stmt->bind_result($id_from_db, $email_from_db);
@@ -73,7 +73,6 @@
 			
 			//create password on tühi
 			if(empty($_POST["Cpassword"])){
-				//jah oli tühi
 				$create_passworderror = "Password is required";
 			}else{
 				//kontrollib et parool oleks rohkem kui 8 sümbolit
@@ -87,6 +86,19 @@
 				//kui parool ei võrdu kordusparooliga lükkab errori ette
 				$create_passwordAgainerror = "Your passwords don't match";
 			}
+			if ($create_emailerror == "" && $create_passworderror == "" && $create_passwordAgainerror == ""){
+				echo "Loodud kasutaja email on".$Cemail."ja username on".$Cusername;
+				$password_hash = hash("sha512", $Cpassword);
+				$stmt = $mysqli->prepare("INSERT INTO user_info (email, password, username) VALUES (?, ?, ?)");
+				//Kui error kasuta:
+				//echo $mysqli->error;
+				//echo $stmt->error;
+			
+				//?? saavad väärtused
+				$stmt->bind_param("sss", $Cemail, $password_hash, $Cusername);
+				$stmt->execute();
+				$stmt->close();
+			}
 		}
 	}	
 	function test_input($data) {
@@ -95,6 +107,7 @@
 		$data = htmlspecialchars($data);
 		return $data;	
 	}
+	$mysqli->close();
 ?>
 
 <?php
