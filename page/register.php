@@ -1,40 +1,88 @@
 <?php
+	 //ühenduse loomiseks kasuta
+	require_once("../../config.php");
+	$database = "if15_kenaon";
+	$mysqli = new mysqli($servername, $username, $password, $database);
+	
+	// funktsioon, mis eemaldab kõikvõimaliku üleliigse tekstist
+	function cleanInput($data) { 
+  	$data = trim($data); //eemaldab tühikud, tabid ja enterid
+  	$data = stripslashes($data); // eemaldab tagurpidi kaldkriipsud "\"
+  	$data = htmlspecialchars($data);
+  	return $data;
+	}
+
 	//Defineerime muutujad
 	$email_error = "";
 	$password_error = "";
 	$password_error2 = "";
 	$password_error3 = "";
-	$password_error_pikkus = "";
+	$password_error_length = "";
+	
+	// muutujad väärtuste jaoks
+	$email = "";
+	$password = "";
+	$password2 = "";
 	//kontrollin kas keegi vajutas nuppu
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
 		
+		 if(isset($_POST["register"])){
 		//echo"jah";
 		
-		//kas e-post on tühi
-		if( empty($_POST["email"]) ) {
-			
-			//jah oli tühi
-			$email_error = "See väli on kohustuslik";
-			
-		}
-		if( empty($_POST["password"]) ) {
-			
-			//jah oli tühi
-			$password_error = "See väli on kohustuslik";
-		}
-		elseif (strlen($_POST["password"]) <= 7){
-			$password_error_pikkus = "Parool peab olema vähemalt 8 tähemärki.";
-		} 
-		if( empty($_POST["password2"]) ) {
-			
-			//jah oli tühi
-			$password_error2 = "See väli on kohustuslik";
-		} elseif( empty($_POST["password2"]) == false && $_POST["password"] != $_POST["password2"]) {
-			
-			$password_error3 = "Paroolid ei kattu omavahel";
-			//echo"Paroolid ei kattu omavahel!";
-		}
+			//kas e-post on tühi
+			if( empty($_POST["email"]) ) {
+				
+				//jah oli tühi
+				$email_error = "See väli on kohustuslik";
+				
+			}else
+			{
+				$email = cleanInput($_POST["email"]);
+			}
+			if( empty($_POST["password"]) ) {
+				
+				//jah oli tühi
+				$password_error = "See väli on kohustuslik";
+			}
+			elseif (strlen($_POST["password"]) <= 7){
+				$password_error_length = "Parool peab olema vähemalt 8 tähemärki.";
+			}
+			else
+			{
+				$password = cleanInput($_POST["password"]);
+			}
+			if( empty($_POST["password2"]) ) {
+				
+				//jah oli tühi
+				$password_error2 = "See väli on kohustuslik";
+			} elseif( empty($_POST["password2"]) == false && $_POST["password"] != $_POST["password2"]) {
+				
+				$password_error3 = "Paroolid ei kattu omavahel";
+				//echo"Paroolid ei kattu omavahel!";			
+			}
+			if(	$email_error == "" && $password_error == "" && $password_error2 == "" && $password_error3 == "" && $password_error_length == "")
+			{
+				echo "Võib kasutajat luua! Kasutajanimi on ".$email." ja parool on ".$password;
+				
+				$password_hash = hash("sha512", $password);
+				echo "<br>";
+				echo $password_hash;
+				
+				$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
+				
+				//alumine funktsioon näitab mis error oleks kui on midagi
+				echo $mysqli->error;
+				echo $stmt->error;
+				//asendame ? märgid muutujate väärtustega
+				//ss - s tähendab string iga muutuja kohta
+				$stmt->bind_param("ss", $email, $password_hash);
+				$stmt->execute();
+				$stmt->close();
+			}
+		 }
+	
 	}
+	
 ?>
 <?php
 	$page_title = "Registreerimine";
@@ -44,9 +92,9 @@
 		<h2>Register</h2>
 		<form action="register.php" method="post">
 		<input name="email" type="email" placeholder="E-post"> <?php echo $email_error; ?> <br><br>
-		<input name="password" type="password" placeholder="Parool" > <?php echo $password_error; echo $password_error_pikkus; ?> <br><br>
+		<input name="password" type="password" placeholder="Parool" > <?php echo $password_error; echo $password_error_length; ?> <br><br>
 		<input name="password2" type="password" placeholder="Parool" > <?php echo $password_error2; echo $password_error3;?> <br><br>
-		<input type="submit" value="register"> <br><br>
+		<input name="register" type="submit" value="register"> <br><br>
 		</form>
 		
 <?php require_once("../footer.php") ?>
