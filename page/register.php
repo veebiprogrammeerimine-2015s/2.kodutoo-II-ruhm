@@ -82,7 +82,8 @@
 		 }
 	
 	}
-	
+	//Paneme ühenduse kinni
+	$mysqli->close();
 ?>
 <?php
 	$page_title = "Registreerimine";

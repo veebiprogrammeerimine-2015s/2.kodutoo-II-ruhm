@@ -67,16 +67,17 @@
 				
 				if($stmt->fetch()){
 					//leidis
+					echo "<br>";
 					echo"Kasutaja id=".$id_from_db;
 				}else{
 					//tühi, ei leidnud, ju siis midagi valesti
+					echo "<br>";
 					echo "Wrong password or email!";
 					
 				}
 				
 				$stmt->close();
 			}
-		
 		//} elseif(isset($_POST["create"])){
 		
 			// ********************
@@ -95,6 +96,8 @@
 		}
 		
 	}
+	//Paneme ühenduse kinni
+	$mysqli->close();
 ?>
 <?php
 	$page_title = "Login leht";
@@ -102,7 +105,7 @@
 ?>
 <?php require_once("../header.php"); ?>
 	<h2>Login</h2>
-	<form action="login.php" method="post">
+	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 		<input name="email" type="email" placeholder="E-post" > <?php echo $email_error; ?><br><br>
 		<input name="password" type="password" placeholder="Parool" > <?php echo $password_error; ?> <br><br>
 		<input name="login" type="submit" value="Logi sisse" > <br><br>
