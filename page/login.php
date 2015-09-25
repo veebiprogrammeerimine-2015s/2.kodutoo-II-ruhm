@@ -1,11 +1,23 @@
 <?php
+
+	// ühenduse loomiseks kasuta
+	require_once("../../config.php");
+	$database = "if15_kenaon";
+	$mysqli = new mysqli($servername, $username, $password, $database);
 	
+	// funktsioon, mis eemaldab kõikvõimaliku üleliigse tekstist
+	function cleanInput($data) { 
+  	$data = trim($data); //eemaldab tühikud, tabid ja enterid
+  	$data = stripslashes($data); // eemaldab tagurpidi kaldkriipsud "\"
+  	$data = htmlspecialchars($data);
+  	return $data;
+  }
 	//echo $_POST["email"];
 	
 	//Defineerime muutujad
 	$email_error = "";
 	$password_error = "";
-	$name_error = "";
+	//$name_error = "";
 	
 	//kontrollin kas keegi vajutas nuppu
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -22,32 +34,62 @@
 			if( empty($_POST["email"]) ) {
 				
 				// jah oli tühi
-				$email_error = "See väli on kohustuslik";
-				
+				$email_error = "See väli on kohustuslik";	
+			}
+			else
+			{
+		// puhastame muutuja võimalikest üleliigsetest sümbolitest
+				$email = cleanInput($_POST["email"]);
 			}
 			
 			// kas parool on tühi
 			if( empty($_POST["password"]) ) {
 				
 				// jah oli tühi
-				$password_error = "See väli on kohustuslik";
+				$password_error = "See väli on kohustuslik";	
+			}
+			else
+			{
+				$password = cleanInput($_POST["password"]);
+			}
+			// Kui oleme siia jõudnud, võime kasutaja sisse logida
+			if($password_error == "" && $email_error == ""){
+				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
 				
+				$password_hash = hash("sha512", $password);
+				
+				$stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
+				$stmt->bind_param("ss", $email, $password_hash);
+				
+				//paneme vastuse muutujatesse
+				$stmt->bind_result($id_from_db, $email_from_db);
+				$stmt->execute();
+				
+				if($stmt->fetch()){
+					//leidis
+					echo"Kasutaja id=".$id_from_db;
+				}else{
+					//tühi, ei leidnud, ju siis midagi valesti
+					echo "Wrong password or email!";
+					
+				}
+				
+				$stmt->close();
 			}
 		
-		
-		} elseif(isset($_POST["create"])){
+		//} elseif(isset($_POST["create"])){
 		
 			// ********************
 			// *** CREATE NUPP ****
 			// ********************
 			
 			// kas e-post on tühi
-			if( empty($_POST["name"]) ) {
+		//	if( empty($_POST["name"]) ) {
 				
 				// jah oli tühi
-				$name_error = "See väli on kohustuslik";
+			//	$name_error = "See väli on kohustuslik";
 				
-			}
+	//		}
 		
 		
 		}
@@ -67,12 +109,14 @@
 	</form>
 	
 	
+	<!--
 	<h2>Create user</h2>
 	<form action="login.php" method="post">
-		<input name="name" type="text" placeholder="Eesnimi Perenimi" > <?php echo $name_error; ?><br><br>
+		<input name="name" type="text" placeholder="Eesnimi Perenimi" > <?php// echo $name_error; ?><br><br>
 		<input name="create" type="submit" value="Loo kasutaja" > <br><br>
 	</form>
 	<p>-----------------------------------------------------------------</p>
+	-->
 	<a href="register.php"> <button>Registreeri  </button> </a>
-		
+	
 <?php require_once("../footer.php") ?>

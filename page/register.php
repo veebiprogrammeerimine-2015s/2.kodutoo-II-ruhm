@@ -90,7 +90,7 @@
 ?>
 <?php require_once("../header.php") ?>
 		<h2>Register</h2>
-		<form action="register.php" method="post">
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 		<input name="email" type="email" placeholder="E-post"> <?php echo $email_error; ?> <br><br>
 		<input name="password" type="password" placeholder="Parool" > <?php echo $password_error; echo $password_error_length; ?> <br><br>
 		<input name="password2" type="password" placeholder="Parool" > <?php echo $password_error2; echo $password_error3;?> <br><br>
