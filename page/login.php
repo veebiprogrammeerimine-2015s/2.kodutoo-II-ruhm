@@ -1,5 +1,9 @@
 <?php
-
+	// ühenduse loomiseks kasuta
+	require_once("../../config.php");
+	$database = "if15_karilaid";
+	$mysqli = new mysqli($servername, $username, $password, $database);
+	
 	$email_error = "";
 	$password_error = "";
 	$password_fail = "";
@@ -19,15 +23,22 @@
 				if ( empty($_POST["email"])) {
 			
 					$email_error = "See väli on kohustuslik";
-			
+			}else{
+				$email = cleanInput($_POST["email"]);
 			
 		}
 				if ( empty($_POST["pass"])) {
 			
 					$password_error = "See väli on kohustuslik";
+				}else{
+					$pass = cleanInput($_POST["pass"]);
 			
-			
-		}			//KASUTAJA LOOMINE
+		}	
+				if($password_error == "" && $email_error == ""){
+				
+					echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
+			}		
+						//KASUTAJA LOOMINE
 		} elseif(isset($_POST["create"])){
 					if ( empty($_POST["mail"])) {
 			
@@ -42,21 +53,28 @@
 			
 		}
 					if ( empty($_POST["confirm_password"])) {
-			
-						$passc_error = "See väli on kohustuslik";
-			
-			
-		}
-		
+
+							$passc_error = "See väli on kohustuslik";
+
+					} else {
+
 					if ($_POST["password"] == $_POST["confirm_password"]) {
-						$password_right = "Paroolid klapivadss";
-		
-		
+						
+							$password_right = "Paroolid klapivad";
+					} else {
+						
+							$password_fail = "Paroolid ei klapi.";
+    }
+
 }
-					else {
-						$password_fail = "Paroolid ei klapi.";
-	}
 		}
+		
+	function cleanInput($data) {
+  	$data = trim($data);
+  	$data = stripslashes($data);
+  	$data = htmlspecialchars($data);
+  	return $data;
+	}
 	}
 ?>
 
