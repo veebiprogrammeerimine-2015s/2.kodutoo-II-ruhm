@@ -1,5 +1,10 @@
 <?php
 
+	//ühenduse loomiseks kasuta
+	require_once("../config.php");
+	$database = "if15_jarmhab";
+	$mysqli = new mysqli($servername, $username, $password, $database);
+
 	//echo $_POST["email"];
 
 //defineerime muutujad
@@ -11,26 +16,30 @@
 	$passwordb_error = "";
 	
 	//kontrollin kas keegi vajutas nuppu
-	if($_SERVER ["REQUEST_METHOD"] == "POST") {
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+		
+	// *********************
+    // **** LOGI SISSE *****
+    // *********************
 		
 		
 				// kontrollin mis nuppu vajutati
 		if(isset($_POST["login"])){
 			
-	
-		
-		
-		
-			//kas e-post on tyhi
+				//kas e-post on tyhi
 			if( empty($_POST["email"])) {
 				//jah oli tyhi
 				$email_error = "See väli on kohustuslik";
-				
+				}else{
+        // puhastame muutuja võimalikest üleliigsetest sümbolitest
+				$email = cleanInput($_POST["email"]);				
 			}
 			if( empty($_POST["password"])) {
 				//jah oli tyhi
 				$password_error = "See väli on kohustuslik";
 				
+			}else{
+				$password = cleanInput($_POST["password"]);
 			}
 			
 			
@@ -52,12 +61,12 @@
 			}
 			if( empty($_POST["email"])) {
 				//jah oli tyhi
-				$emailb_error = "See väli on kohustuslik";
+				$create_email_error = "See väli on kohustuslik";
 				
 			}
 			if( empty($_POST["password"])) {
 				//jah oli tyhi
-				$passwordb_error = "See väli on kohustuslik";
+				$create_password_error = "See väli on kohustuslik";
 				
 			}
 		}
@@ -84,8 +93,8 @@
 	<form action="login.php" method="post" >
 	<input name="first_name" type="text" placeholder="Eesnimi"><?php echo $first_name_error ?> <br><br>
 	<input name="last_name" type="text" placeholder="Perekonnanimi"><?php echo $last_name_error ?> <br><br>
-	<input name="emailb" type="email" placeholder="E-post"><?php echo $emailb_error ?> <br><br>
-	<input name="passwordb" type="password" placeholder="Parool"><?php echo $passwordb_error ?> <br><br>
+	<input name="create_email" type="email" placeholder="E-post"><?php echo $create_email_error ?> <br><br>
+	<input name="create_password" type="password" placeholder="Parool"><?php echo $create_password_error ?> <br><br>
 	<input type="radio" name="gender" value="female">Naine
 	<input type="radio" name="gender" value="male">Mees <br><br>
 	<input name="create" type="submit" value="Registreeri">
