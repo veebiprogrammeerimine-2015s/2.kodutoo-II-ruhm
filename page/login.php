@@ -41,76 +41,150 @@
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
+		
+	// *********************
+    // ** LOO KASUTAJA *****
+    // *********************
+		
 		if( isset($_POST["creat"])){
 		
 		//echo "jah";
 		
 		
 	
-	if(empty($_POST["username"])){
+	if(empty($_POST["create_username"])){
 		
 		$username_error = "See väli on kohustuslik ";
 		
 		
 	}
-		if(empty($_POST["email"])){
+		else{
+				$create_username = cleanInput($_POST["create_username"]);
+			}
+		if(empty($_POST["create_email"])){
 		
 		$email_error = "See väli on kohustuslik ";
 		
 		
-	}
-				if(empty($_POST["password"])){
+	}		else{
+				$create_email = cleanInput($_POST["create_email"]);
+			}
+				if(empty($_POST["create_password"])){
 		
 		$password_error = "See väli on kohustuslik ";
 		
 		
 	}
-				if(empty($_POST["firstname"])){
+			else{
+				$create_password = cleanInput($_POST["create_password"]);
+			}
+				if(empty($_POST["create_firstname"])){
 		
 		$firstname_error = "See väli on kohustuslik ";
 		
 		
 	}
-				if(empty($_POST["lastname"])){
+			else{
+				$create_firstname = cleanInput($_POST["create_firstname"]);
+			}
+				if(empty($_POST["create_lastname"])){
 		
 		$lastname_error = "See väli on kohustuslik ";
 		
 		
 	}
-				if(empty($_POST["tel"])){
+			else{
+				$create_lastname = cleanInput($_POST["create_lastname"]);
+			}
+				if(empty($_POST["create_tel"])){
 		
 		$tel_error = "See väli on kohustuslik ";
 		
 		
 	}
+			else{
+				$create_tel = cleanInput($_POST["create_tel"]);
+			}
+			
+			if(	$email_error == "" && $password_error == ""){
+				echo "Võib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
+				
+				$password_hash = hash("sha512", $create_password);
+				echo "<br>";
+				echo $password_hash;
+				
+				$stmt = $mysqli->prepare("INSERT INTO create_user (email, password) VALUE (?, ?)");
+				
+				//asendame ? muutujate v22rtustega
+				
+				//echo $mysqli->error;
+				//echo $stmt->error;
+				
+				$stmt->bind_param("ss",$create_email, $password_hash);
+				$stmt->execute();
+				$stmt->close();
+      }
+			
+			
 	
 	
-	}elseif( isset($_POST["login"])){
+		}
+	 // *********************
+    // **** LOGI SISSE *****
+    // *********************
+	
+	if( isset($_POST["login"])){
 		
 		
 		if(empty($_POST["email"])){
 		
-		$logemail_error = "See väli on kohustuslik ";
+			if ( empty($_POST["email"]) ) {
+				$logemail_error = "See väli on kohustuslik";
+			}else{
+        // puhastame muutuja võimalikest üleliigsetest sümbolitest
+				$email = cleanInput($_POST["email"]);
+			}
+			if ( empty($_POST["password"]) ) {
+				$logpassword_error = "See väli on kohustuslik";
+			}else{
+				$password = cleanInput($_POST["password"]);
+			}
 		
 		
-	}
+		
+		
+		
+	}      
+	// Kui oleme siia jõudnud, võime kasutaja sisse logida
+			if($logpassword_error == "" && $logemail_error == ""){
+				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
+				
+				$password_hash = hash("sha512", $password);
+				$stmt = $mysqli->prepare("SELECT id, email FROM create_user WHERE email=? AND password=?");
+				$stmt->bind_param("ss", $email, $password_hash); //asnendab küsimärgid
+				
+				//paneme vastused muutujatesse
+				
+				$stmt->bind_result($id_from_db, $email_from_db);
+				$stmt->execute();
+				echo "<br>";
+				
+				if($stmt->fetch()){
+					
+					echo "Kasutaja id=".$id_from_db;
+					
+				}
+				else{
+					//tühi, ei leidnud
+					echo "Wrong password or email";
+				}
+				$stmt->close();
+				
+			}
 	
-	if(empty($_POST["password"])){
 		
-		$logpassword_error = "See väli on kohustuslik ";
-		
-		
-	}
-		
-		
-		
-		
-		
-	}
 	
-		
 	}
-	
 	
 	function cleanInput($data) {
   	$data = trim($data); //tabulaator, tühikud, Enter
@@ -120,7 +194,9 @@
   }
 	
 	
-	
+$mysqli->close();
+
+	}
 	
 ?>
 <?php
