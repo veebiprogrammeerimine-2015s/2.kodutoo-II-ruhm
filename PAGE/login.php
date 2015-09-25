@@ -1,4 +1,9 @@
 <?php
+	//Ühenduse loomiseks
+	require_once("../../config.php");
+	$database = "if15_rimo";
+	$mysqli = new mysqli($servername, $username, $password, $database);
+	
 	//errorid
 	$email_error = "";
 	$password_error = "";
@@ -13,6 +18,7 @@
 	$Cpassword = "";
 	$Cusername = "";
 	$Cemail = "";
+	$login_accepted = "";
 	
 	//kontrollin kas keegi vajutas nuppu
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -31,6 +37,23 @@
 			}else{
 				$password = test_input($_POST["password"]);
 			}
+			if($password_error == "" && $email_error == ""){
+				$login_accepted = "You've logged in with".$email;
+				
+				$password_hash = has("sha512", $password);
+				$stmt = $mysqli->prepare("SELECT id FROM user_info WHERE email=? and password=?");
+				$stmt->bind_param("ss", $email, $password_hash);
+				//vastuse muutujatesse
+				$stmt->bind_result($id_from_db, $email_from_db);
+				$stmt->execute();
+				//kas saime andmebaasist kätte?
+				if($stmt->fetch()){
+					echo "kasutaja id=".$id_from_db;
+				}else{
+					echo "Wrong password or email";
+				}
+				$stmt->close();
+			}
 		}
 		
 		if(isset($_POST["Create"])){
@@ -45,7 +68,7 @@
 			if(empty($_POST["Cusername"])){
 				$create_usererror = "Username is required";
 			}else{
-				$Cusername = test_inpu($_POST["Cusername"]);
+				$Cusername = test_input($_POST["Cusername"]);
 			}
 			
 			//create password on tühi
@@ -84,6 +107,7 @@ $file_name = "login.php";
 
 	<h3>Mõtlesin siis teha lehe kuhu inimesed saavad teha postitusi erinevate teemade alla ja teised saavad siis kommenteerida, põhimõtteliselt väga lihtsustatud reddit</h3>
 	<h2>Login</h2>
+	<?php echo $login_accepted ?>
 	<p>* required field.</p>
 	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 	<input name="email" type="email" placeholder="E-mail" value="<?php echo $email ?>"> * <?php echo $email_error?><br><br>
