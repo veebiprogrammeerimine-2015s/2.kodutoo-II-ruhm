@@ -38,9 +38,7 @@
 				$password = test_input($_POST["password"]);
 			}
 			if($password_error == "" && $email_error == ""){
-				$login_accepted = "You've logged in with".$email;
-				
-				$password_hash = has("sha512", $password);
+				$password_hash = hash("sha512", $password);
 				$stmt = $mysqli->prepare("SELECT id FROM user_info WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash);
 				//vastuse muutujatesse
@@ -49,6 +47,7 @@
 				//kas saime andmebaasist kätte?
 				if($stmt->fetch()){
 					echo "kasutaja id=".$id_from_db;
+					$login_accepted = "You've logged in with ".$email;
 				}else{
 					echo "Wrong password or email";
 				}
@@ -86,7 +85,7 @@
 				//kui parool ei võrdu kordusparooliga lükkab errori ette
 				$create_passwordAgainerror = "Your passwords don't match";
 			}
-			if ($create_emailerror == "" && $create_passworderror == "" && $create_passwordAgainerror == ""){
+			if ($create_emailerror == "" && $create_passworderror == "" && $create_passwordAgainerror == "" && $create_usererror = ""){
 				echo "Loodud kasutaja email on".$Cemail."ja username on".$Cusername;
 				$password_hash = hash("sha512", $Cpassword);
 				$stmt = $mysqli->prepare("INSERT INTO user_info (email, password, username) VALUES (?, ?, ?)");
