@@ -82,6 +82,15 @@
 				echo "<br>";
 				echo $password_hash;	
 				
+				$stmt = $mysqli->prepare("INSERT INTO usesdf_sample (email, password) VALUE (?, ?)");
+				
+				//echo $mysqli->error;
+				//echo $stmt->error;
+				//asendame ? märgid muutujate väärtuste
+				// ss - s tähendab string iga muutuja kohta
+				$stmt->bind_param("ss", $create_email, $password_hash);
+				$stmt->execute();
+				$stmt->close();
 			}	
 		
 		
@@ -92,7 +101,8 @@
       $data = htmlspecialchars($data);
       return $data;
     }
-		
+				// paneme ühenduse kinni
+				$mysqli->close();
 ?>
 
 
