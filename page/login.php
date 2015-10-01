@@ -38,31 +38,6 @@
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
 	// *********************
     // ** LOO KASUTAJA *****
     // *********************
@@ -117,87 +92,35 @@
 			else{
 				$create_tel = cleanInput($_POST["create_tel"]);
 			}
-			$create_amet = cleanInput($_POST["create_tel"]);
+			
+
+
+
+
+
+
 			
 			if(	$email_error == "" && $password_error == ""){
 				echo "Võib kasutajat luua! Kasutajanimi on ".$create_username." ja parool on ".$create_password;
 				echo "<br>";
-				echo "Teie eesnimi on ".$create_firstname." ja perekonnanimi ".$create_lastname." ning email ".$create_email;
+				echo "Teie eesnimi on ".$create_firstname." ja perekonnanimi on ".$create_lastname." ning email on ".$create_email;
 				
 				$password_hash = hash("sha512", $create_password);
 				echo "<br>";
 				echo $password_hash;
 				
-				$stmt = $mysqli->prepare("INSERT INTO create_user (username, email, firstname, lastname, tel, amet, password) VALUE (?, ?, ?, ?, ?, ?, ?)");
+				$stmt = $mysqli->prepare("INSERT INTO create_user (username, email, firstname, lastname, tel, amet, password) VALUES (?, ?, ?, ?, ?, 'Talupoeg', ?)");
 				
 				//asendame ? muutujate v22rtustega
 				
 				//echo $mysqli->error;
 				//echo $stmt->error;
 				
-				$stmt->bind_param("sssssss",$create_username, $create_email, $create_firstname, $create_lastname, $create_tel, $create_amet, $password_hash);
+				$stmt->bind_param("ssssss",$create_username, $create_email, $create_firstname, $create_lastname, $create_tel, $password_hash);
 				$stmt->execute();
 				$stmt->close();
-      
-			
-			
-	
-	
-
 		}
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	 // *********************
     // **** LOGI SISSE *****
@@ -223,7 +146,7 @@
 	      
 	// Kui oleme siia jõudnud, võime kasutaja sisse logida
 			if($logpassword_error == "" && $logemail_error == ""){
-				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
+				echo "Võib sisse logida!";
 				
 				$password_hash = hash("sha512", $password);
 				$stmt = $mysqli->prepare("SELECT id, username, email, firstname, lastname, tel, amet FROM create_user WHERE email=? AND password=?");
@@ -237,19 +160,21 @@
 				
 				if($stmt->fetch()){
 					
-					echo "Kasutaja id=".$id_from_db;
+					echo "Kasutaja id = ".$id_from_db;
 					echo "<br>";
-					echo "Kasutaja email=".$email_from_db;
+					echo "Kasutaja email = ".$email_from_db;
 					echo "<br>";
-					echo "Kasutaja kasutajanimi=".$username_from_db;
+					echo "Kasutaja parool on ".$password;
 					echo "<br>";
-					echo "Kasutaja eesnimi=".$firstname_from_db;
+					echo "Kasutaja kasutajanimi = ".$username_from_db;
 					echo "<br>";
-					echo "Kasutaja perekonnanimi=".$lastname_from_db;
+					echo "Kasutaja eesnimi = ".$firstname_from_db;
 					echo "<br>";
-					echo "Kasutaja telefoni number=".$tel_from_db;
+					echo "Kasutaja perekonnanimi = ".$lastname_from_db;
 					echo "<br>";
-					echo "Kasutaja amet=".$amet_from_db;
+					echo "Kasutaja telefoni number = ".$tel_from_db;
+					echo "<br>";
+					echo "Kasutaja amet = ".$amet_from_db;
 					
 				}
 				else{
