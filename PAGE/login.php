@@ -45,8 +45,10 @@
 				$password_hash = hash("sha512", $password);
 				$stmt = $mysqli->prepare("SELECT id, email FROM user_info WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash);
+				//vastuse muutujatesse				
 				$stmt->bind_result($id_from_db, $email_from_db);
 				$stmt->execute();
+				//kas saime andmebaasist kätte?
 				if($stmt->fetch()){
 					echo " user id=".$id_from_db;
 					$login_accepted = "You can login. Email is ".$email." and password is ".$password;
@@ -94,6 +96,11 @@
 				echo "<br>";
 				echo $password_hash;
 				$stmt = $mysqli->prepare("INSERT INTO user_info (email, password, username) VALUES (?, ?, ?)");
+				//Kui error kasuta:
+				//echo $mysqli->error;
+				//echo $stmt->error;
+			
+				//?? saavad väärtused
 				$stmt->bind_param("sss", $Cemail, $Cusername, $password_hash);
 				$stmt->execute();
 				$stmt->close();
@@ -102,11 +109,11 @@
 			
 		}
 	}
-		
+	// funktsioon, mis eemaldab kõikvõimaliku üleliigse tekstist
 	function test_input($data) {
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
+		$data = trim($data);                // võtab tühikud, tabid ja enterid ära
+		$data = stripslashes($data);        // võtab \\ ära
+		$data = htmlspecialchars($data);    // muudab asjad tekstiks
 		return $data;	
 	}
 	$mysqli->close();
@@ -124,7 +131,7 @@ $file_name = "login.php";
 	<h2>Login</h2>
 	<?php echo $login_accepted ?>
 	<p>* required field.</p>
-	<form action="login.php" method="post">
+	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 	<input name="email" type="email" placeholder="E-mail" value="<?php echo $email ?>"> * <?php echo $email_error?><br><br>
 	<input name="password" type="password" placeholder="password"> * <?php echo $password_error?><br><br>
 	<input name="Login" type="submit" value="Login"> <br><br>
@@ -132,7 +139,7 @@ $file_name = "login.php";
 
 	<h2>Create user</h2>
 	<p>* required field.</p>
-	<form action="login.php" method="post">
+	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 	<input name="Cusername" type="text" placeholder="Username" value="<?php echo $Cusername ?>"> * <?php echo $create_usererror?><br><br>
 	<input name="Cemail" type="email" placeholder="E-mail" value="<?php echo $Cemail ?>"> * <?php echo $create_emailerror?><br><br>
 	<input name="Cpassword" type="password" placeholder="password"> * <?php echo $create_passworderror?><br><br>
