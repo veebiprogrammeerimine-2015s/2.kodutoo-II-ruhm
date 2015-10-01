@@ -12,8 +12,16 @@
 	$password_error = "";
 	$first_name_error = "";
 	$last_name_error = "";
-	$emailb_error = "";
-	$passwordb_error = "";
+	$create_email_error = "";
+	$create_password_error = "";
+	
+ // muutujad väärtuste jaoks
+	$email = "";
+	$password = "";
+	$first_name = "";
+	$last_name = "";
+	$create_email = "";
+	$create_password = "";
 	
 	//kontrollin kas keegi vajutas nuppu
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -21,8 +29,7 @@
 	// *********************
     // **** LOGI SISSE *****
     // *********************
-		
-		
+				
 				// kontrollin mis nuppu vajutati
 		if(isset($_POST["login"])){
 			
@@ -45,30 +52,41 @@
 			
 		
 		} 
-		
+		// *********************
+		// ** LOO KASUTAJA *****
+		// *********************
 		if(isset($_POST["create"])){
 		
 			if( empty($_POST["first name"])) {
 				//jah oli tyhi
 				$first_name_error = "See väli on kohustuslik";
-				
+				}else{
+				$first_name = cleanInput($_POST["first_name"]);				
 			}
 			
 			if( empty($_POST["last name"])) {
 				//jah oli tyhi
 				$last_name_error = "See väli on kohustuslik";
-				
+				}else{
+				$last_name = cleanInput($_POST["first_name"]);
 			}
+			
 			if( empty($_POST["email"])) {
 				//jah oli tyhi
 				$create_email_error = "See väli on kohustuslik";
-				
+			}else{
+				$create_email = cleanInput($_POST["create_email"]);
 			}
+			
 			if( empty($_POST["password"])) {
 				//jah oli tyhi
 				$create_password_error = "See väli on kohustuslik";
-				
-			}
+			}else {
+				if(strlen($_POST["create_password"]) < 8) {
+					$create_password_error = "Peab olema vähemalt 8 tähemärki pikk!";
+				}else{
+					$create_password = cleanInput($_POST["create_password"]);
+				}
 		}
 	}
 	
