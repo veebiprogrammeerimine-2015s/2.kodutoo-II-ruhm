@@ -113,14 +113,14 @@
 			
 												
 			
-			if(	$create_email_error == "" && $create_password_error == "" && $create_last_name_error == "" && $create_fist_name_error == ""){
-				echo "Võib kasutajat luua! Teie nimi on ".$create_first_name." Kasutajanimi on ".$create_email." ja parool on ".$create_password;
+			if(	$create_email_error == "" && $create_password_error == "" && $create_last_name_error == "" && $create_first_name_error == ""){
+				echo "Võib kasutajat luua! Teie nimi on ".$create_first_name." ,kasutajanimi on ".$create_email." ja parool on ".$create_password;
 				
 				$password_hash = hash("sha512", $create_password);
 				echo "<br>";
 				echo $password_hash;
 				
-				$stmt = $mysqli->prepare("INSERT INTO user(firstname, lastname, email, password) VALUE(?, ?, ?, ?)");
+				$stmt = $mysqli->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
 				
 				//echo $mysqli->error;
 				//echo $stmt->error;
