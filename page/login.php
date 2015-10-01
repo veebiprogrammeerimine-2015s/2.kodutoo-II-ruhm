@@ -109,6 +109,23 @@
 				}else{
 					$create_password = cleanInput($_POST["create_password"]);
 				}
+			}
+			if(	$create_email_error == "" && $create_password_error == ""){
+				echo "Võib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
+
+			$password_hash = hash("sha512", $create_password);
+				echo "<br>";
+				echo $password_hash;
+
+			$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
+				echo $mysqli->error;
+				//echo $stmt->error;
+				
+			//asendame kysimärgid muutujate väärtustega
+				$stmt->bind_param("ss", $create_email, $password_hash);
+				$stmt->execute();
+				$stmt->close();
+			}
 		}
 	}
 	
