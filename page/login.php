@@ -56,7 +56,7 @@
 				
 				$password_hash = hash("sha512", $password);
 				
-				$stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
+				$stmt = $mysqli->prepare("SELECT id, email FROM user WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash);
 				
 				//paneme vastused muutujatesse
@@ -119,7 +119,7 @@
 				echo "<br>";
 				echo $password_hash;
 
-			$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
+			$stmt = $mysqli->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
 				echo $mysqli->error;
 				//echo $stmt->error;
 				
