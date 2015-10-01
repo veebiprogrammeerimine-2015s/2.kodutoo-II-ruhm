@@ -121,10 +121,10 @@
 
 			$stmt = $mysqli->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
 				echo $mysqli->error;
-				//echo $stmt->error;
+				echo $stmt->error;
 				
 			//asendame kysimärgid muutujate väärtustega
-				$stmt->bind_param("ss", $first_name, $last_name, $create_email, $password_hash);
+				$stmt->bind_param("ssss", $first_name, $last_name, $create_email, $password_hash);
 				$stmt->execute();
 				$stmt->close();
 			}
