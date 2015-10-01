@@ -129,10 +129,10 @@
 				$stmt->execute();
 				$stmt->close();
 
-		}
+			}
 		
 	}
-	}
+		}
   // funktsioon, mis eemaldab kõikvõimaliku üleliigse tekstist
   function cleanInput($data) {
   	$data = trim($data); //võtab ära tühjad enterid, tühikud ja tab´is
@@ -169,7 +169,7 @@
 		<input name="create_first_name" type="text" placeholder="Eesnimi" value="<?php echo $create_first_name; ?>"> <?php echo $create_first_name_error ?> <br><br>
 		<input name="create_last_name" type="text" placeholder="Perekonnanimi"value="<?php echo $create_last_name; ?>"> <?php echo $create_last_name_error ?> <br><br>
 		<input name="create_email" type="email" placeholder="E-post" value="<?php echo $create_email; ?>" > <?php echo $create_email_error ?> <br><br>
-		<input name="create_password type="password" placeholder="Parool" value="<?php echo $create_password; ?>"> <?php echo $create_password_error ?> <br><br>
+		<input name="create_password" type="password" placeholder="Parool" value="<?php echo $create_password; ?>"> <?php echo $create_password_error ?> <br><br>
 		<input type="submit" name ="create" value="Loo konto"> <br><br>
 	</form>
 <?php 
