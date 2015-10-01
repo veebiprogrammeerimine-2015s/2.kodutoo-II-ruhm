@@ -14,6 +14,7 @@
 	$last_name_error = "";
 	$create_email_error = "";
 	$create_password_error = "";
+	$gender_error = "";
 	
  // muutujad väärtuste jaoks
 	$email = "";
@@ -22,6 +23,7 @@
 	$last_name = "";
 	$create_email = "";
 	$create_password = "";
+	$gender = "";
 	
 	//kontrollin kas keegi vajutas nuppu
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -160,8 +162,8 @@
 	<input name="last_name" type="text" placeholder="Perekonnanimi"><?php echo $last_name_error ?> <br><br>
 	<input name="create_email" type="email" placeholder="E-post"><?php echo $create_email_error ?> <br><br>
 	<input name="create_password" type="password" placeholder="Parool"><?php echo $create_password_error ?> <br><br>
-	<input type="radio" name="gender" value="female">Naine
-	<input type="radio" name="gender" value="male">Mees <br><br>
+	<!--<input type="radio" name="gender" value="female">Naine
+	<input type="radio" name="gender" value="male">Mees <br><br>-->
 	<input name="create" type="submit" value="Registreeri">
 	</form>
 	<br><br>
