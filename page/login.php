@@ -38,12 +38,36 @@
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
 	// *********************
     // ** LOO KASUTAJA *****
     // *********************
 		
-		if( isset($_POST["creat"])){
+		if( isset($_POST["create"])){
 		
 		//echo "jah";
 		
@@ -93,9 +117,12 @@
 			else{
 				$create_tel = cleanInput($_POST["create_tel"]);
 			}
+			$create_amet = cleanInput($_POST["create_tel"]);
 			
 			if(	$email_error == "" && $password_error == ""){
-				echo "Võib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
+				echo "Võib kasutajat luua! Kasutajanimi on ".$create_username." ja parool on ".$create_password;
+				echo "<br>";
+				echo "Teie eesnimi on ".$create_firstname." ja perekonnanimi ".$create_lastname." ning email ".$create_email;
 				
 				$password_hash = hash("sha512", $create_password);
 				echo "<br>";
@@ -111,12 +138,67 @@
 				$stmt->bind_param("sssssss",$create_username, $create_email, $create_firstname, $create_lastname, $create_tel, $create_amet, $password_hash);
 				$stmt->execute();
 				$stmt->close();
-      }
+      
 			
 			
 	
 	
+
 		}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	 // *********************
     // **** LOGI SISSE *****
     // *********************
@@ -144,18 +226,30 @@
 				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
 				
 				$password_hash = hash("sha512", $password);
-				$stmt = $mysqli->prepare("SELECT id, email FROM create_user WHERE email=? AND password=?");
+				$stmt = $mysqli->prepare("SELECT id, username, email, firstname, lastname, tel, amet FROM create_user WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash); //asnendab küsimärgid
 				
 				//paneme vastused muutujatesse
 				
-				$stmt->bind_result($id_from_db, $email_from_db);
+				$stmt->bind_result($id_from_db, $username_from_db, $email_from_db, $firstname_from_db, $lastname_from_db, $tel_from_db, $amet_from_db);
 				$stmt->execute();
 				echo "<br>";
 				
 				if($stmt->fetch()){
 					
 					echo "Kasutaja id=".$id_from_db;
+					echo "<br>";
+					echo "Kasutaja email=".$email_from_db;
+					echo "<br>";
+					echo "Kasutaja kasutajanimi=".$username_from_db;
+					echo "<br>";
+					echo "Kasutaja eesnimi=".$firstname_from_db;
+					echo "<br>";
+					echo "Kasutaja perekonnanimi=".$lastname_from_db;
+					echo "<br>";
+					echo "Kasutaja telefoni number=".$tel_from_db;
+					echo "<br>";
+					echo "Kasutaja amet=".$amet_from_db;
 					
 				}
 				else{
