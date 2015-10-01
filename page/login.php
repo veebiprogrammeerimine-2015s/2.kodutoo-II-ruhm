@@ -1,7 +1,7 @@
 <?php
 
 	//ühenduse loomiseks kasuta
-	require_once("../config.php");
+	require_once("../../config.php");
 	$database = "if15_jarmhab";
 	$mysqli = new mysqli($servername, $username, $password, $database);
 
@@ -79,28 +79,28 @@
 		// *********************
 		if(isset($_POST["create"])){
 		
-			if( empty($_POST["first name"])) {
+			if( empty($_POST["first_name"])) {
 				//jah oli tyhi
 				$first_name_error = "See väli on kohustuslik";
 				}else{
 				$first_name = cleanInput($_POST["first_name"]);				
 			}
 			
-			if( empty($_POST["last name"])) {
+			if( empty($_POST["last_name"])) {
 				//jah oli tyhi
 				$last_name_error = "See väli on kohustuslik";
 				}else{
 				$last_name = cleanInput($_POST["first_name"]);
 			}
 			
-			if( empty($_POST["email"])) {
+			if( empty($_POST["create_email"])) {
 				//jah oli tyhi
 				$create_email_error = "See väli on kohustuslik";
 			}else{
 				$create_email = cleanInput($_POST["create_email"]);
 			}
 			
-			if( empty($_POST["password"])) {
+			if( empty($_POST["create_password"])) {
 				//jah oli tyhi
 				$create_password_error = "See väli on kohustuslik";
 			}else {
@@ -126,9 +126,17 @@
 				$stmt->execute();
 				$stmt->close();
 			}
-		}
+		} // create if end
 	}
-	
+	function cleanInput($data) {
+  	$data = trim($data);
+  	$data = stripslashes($data);
+  	$data = htmlspecialchars($data);
+  	return $data;
+  }
+  
+  //paneme ühenduse kinni
+  $mysqli->close();
 ?>
 
 <?php
