@@ -48,9 +48,31 @@
 			}else{
 				$password = cleanInput($_POST["password"]);
 			}
-			
-			
-		
+		// Kui oleme siia jõudnud, võime kasutaja sisse logida	
+			if($password_error == "" && $email_error == ""){
+				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
+				
+				$password_hash = hash("sha512", $password);
+				
+				$stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
+				$stmt->bind_param("ss", $email, $password_hash);
+				
+				//paneme vastused muutujatesse
+				$stmt->bind_result($id_from_db, $id_from_db);
+				$stmt->execute();
+				
+				if($stmt->fetch()){
+					//leidis
+					echo "kasutaja id=".$id_from_db;
+					
+				}else{
+					//tyhi ei leidnud
+					echo "wrong password or email id";
+					
+				}
+				
+				
+			}
 		} 
 		// *********************
 		// ** LOO KASUTAJA *****
