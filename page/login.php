@@ -92,7 +92,7 @@
 				//jah oli tyhi
 				$last_name_error = "See väli on kohustuslik";
 				}else{
-				$last_name = cleanInput($_POST["first_name"]);
+				$last_name = cleanInput($_POST["last_name"]);
 			}
 			
 			if( empty($_POST["create_email"])) {
