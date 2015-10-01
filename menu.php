@@ -11,7 +11,8 @@
 	
 	
 	<li>
-	<a href="home.php">Avaleht</a> </li>
+	<a href="home.php">Avaleht</a> 
+	</li>
 	
 	<?php } ?>
 	
@@ -20,7 +21,7 @@
 	if($file_name == "login.php"){
 		echo "<li>Logi sisse</li";
 		
-	}else{ //pooleli
+	}else{ 
 		
 		echo '<li><a href="login.php">Login</a></li>';
 	

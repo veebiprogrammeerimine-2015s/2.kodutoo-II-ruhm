@@ -112,19 +112,19 @@
 					$create_password = cleanInput($_POST["create_password"]);
 				}
 			}
-			if(	$create_email_error == "" && $create_password_error == ""){
+			if(	$create_email_error == "" && $create_password_error == "" && $first_name_error == "" && $last_name_error == ""){
 				echo "Võib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
 
 			$password_hash = hash("sha512", $create_password);
 				echo "<br>";
 				echo $password_hash;
 
-			$stmt = $mysqli->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
+			$stmt = $mysqli->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
 				echo $mysqli->error;
 				//echo $stmt->error;
 				
 			//asendame kysimärgid muutujate väärtustega
-				$stmt->bind_param("ss", $create_email, $password_hash);
+				$stmt->bind_param("ss", $first_name, $last_name, $create_email, $password_hash);
 				$stmt->execute();
 				$stmt->close();
 			}
@@ -170,4 +170,4 @@
 	<p>Mvp ideeks mõtlesin teha mingi veebirakenduse disc golfi jaoks. Ma pole päris kindel, kuidas ja kas seda teha saab, aga esialgne mõte oli, et kasutaja saaks sisestada, mis on raja par ja siis sisestada mitu viset tal endal ketta korvi saamiseks kulus. Samuti võiks rakendus näidata ka üldskoori, kus on summeeritud kõikide radade par ning enda skoor. Loodetavasti midagi sellist sobiks!?</p>
 	
 	
-<?php require_once("../footer.php");
+<?php require_once("../footer.php"); ?>
