@@ -19,13 +19,10 @@
 	$firstname_error ="";
 	$lastname_error ="";
 	$tel_error ="";
+
 	$logemail_error ="";
 	$logpassword_error ="";
-	
 
-	
-	
-	
 	$create_username = "";
 	$create_email = "";
 	$create_firstname = "";
@@ -50,17 +47,11 @@
 		
 		//echo "jah";
 		
-		
-	
-	if(empty($_POST["create_username"])){
-		
-		$username_error = "See väli on kohustuslik ";
-		
-		
-	}
-		else{
+		if(empty($_POST["create_username"])){		
+		$username_error = "See väli on kohustuslik ";		
+	}else{
 				$create_username = cleanInput($_POST["create_username"]);
-			}
+		 }
 		if(empty($_POST["create_email"])){
 		
 		$email_error = "See väli on kohustuslik ";
@@ -72,10 +63,7 @@
 				if(empty($_POST["create_password"])){
 		
 		$password_error = "See väli on kohustuslik ";
-		
-		
-	}
-			else{
+					}			else{
 				$create_password = cleanInput($_POST["create_password"]);
 			}
 				if(empty($_POST["create_firstname"])){
@@ -113,14 +101,14 @@
 				echo "<br>";
 				echo $password_hash;
 				
-				$stmt = $mysqli->prepare("INSERT INTO create_user (email, password) VALUE (?, ?)");
+				$stmt = $mysqli->prepare("INSERT INTO create_user (username, email, firstname, lastname, tel, amet, password) VALUE (?, ?, ?, ?, ?, ?, ?)");
 				
 				//asendame ? muutujate v22rtustega
 				
 				//echo $mysqli->error;
 				//echo $stmt->error;
 				
-				$stmt->bind_param("ss",$create_email, $password_hash);
+				$stmt->bind_param("sssssss",$create_username, $create_email, $create_firstname, $create_lastname, $create_tel, $create_amet, $password_hash);
 				$stmt->execute();
 				$stmt->close();
       }
@@ -136,25 +124,21 @@
 	if( isset($_POST["login"])){
 		
 		
-		if(empty($_POST["email"])){
 		
 			if ( empty($_POST["email"]) ) {
 				$logemail_error = "See väli on kohustuslik";
-			}else{
+			}
+			else{
         // puhastame muutuja võimalikest üleliigsetest sümbolitest
 				$email = cleanInput($_POST["email"]);
 			}
 			if ( empty($_POST["password"]) ) {
 				$logpassword_error = "See väli on kohustuslik";
-			}else{
-				$password = cleanInput($_POST["password"]);
 			}
-		
-		
-		
-		
-		
-	}      
+			else{
+				$password = cleanInput($_POST["password"]);
+			}		
+	      
 	// Kui oleme siia jõudnud, võime kasutaja sisse logida
 			if($logpassword_error == "" && $logemail_error == ""){
 				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
@@ -182,8 +166,7 @@
 				
 			}
 	
-		
-	
+		}	
 	}
 	
 	function cleanInput($data) {
@@ -195,8 +178,6 @@
 	
 	
 $mysqli->close();
-
-	}
 	
 ?>
 <?php
