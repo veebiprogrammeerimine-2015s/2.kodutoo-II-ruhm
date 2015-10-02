@@ -50,8 +50,7 @@
 				$stmt->execute();
 				//kas saime andmebaasist kätte?
 				if($stmt->fetch()){
-					echo " user id=".$id_from_db;
-					$login_accepted = "You can login. Email is ".$email." and password is ".$password;
+					$login_accepted = "You can login. Email is ".$email." and password is ".$password.". User id= ".$id_from_db;
 				}else{
 					echo "Wrong password or email";
 				}
@@ -101,7 +100,7 @@
 				//echo $stmt->error;
 			
 				//?? saavad väärtused
-				$stmt->bind_param("sss", $Cemail, $Cusername, $password_hash);
+				$stmt->bind_param("sss", $Cemail, $password_hash, $Cusername);
 				$stmt->execute();
 				$stmt->close();
 			}
