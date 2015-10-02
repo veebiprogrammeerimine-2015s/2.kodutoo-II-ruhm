@@ -49,9 +49,9 @@
 				echo "võib sisse logida! User on ".$email." ja pw on ".$password;
 				
 				$password_hash = hash("sha512", $password);
-				$stmt = $mysqli->prepare("SELECT id, email FROM users WHERE email=? AND password=?");
+				$stmt = $mysqli->prepare("SELECT id, email, name, age FROM users WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash);
-				$stmt->bind_result($id_from_db, $email_from_db);
+				$stmt->bind_result($id_from_db, $email_from_db, $name_from_db, $age_from_db);
 
 				$stmt->execute();
 				
@@ -59,8 +59,12 @@
 				if($stmt->fetch()){
 					
 					echo "  kasutaja id=".$id_from_db;
+					
+					echo ". Nimi on:  ".$name_from_db;
+					echo ". Vanus on: ".$age_from_db;
 				}else{
 					echo "wrong password or email";
+					//siis kui ei leidnud vastust tabelist
 				}
 				
 				 $stmt->close();
@@ -79,8 +83,11 @@
 			if(empty($_POST["create_password"])){
 				$create_password_error = "see väli on kohustuslik";
 			}else{
-					$create_password = cleanInput($_POST["create_password"]);
-				}
+				if(strlen($_POST["create_password"]) < 8) {
+					$create_password_error = "Peab olema vähemalt 8 tähemärki pikk!";
+				}else{
+						$create_password = cleanInput($_POST["create_password"]);
+					}
 			
 		
 			if(empty($_POST["create_name"])){
@@ -93,6 +100,7 @@
 			if(empty($_POST["create_age"])){
 				$create_age_error = "see väli on kohustuslik";
 			}else{
+				if $create_age
 				$create_age = cleanInput($_POST["create_age"]);
 			}
 			
