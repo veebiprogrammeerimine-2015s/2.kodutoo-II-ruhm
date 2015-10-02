@@ -122,11 +122,12 @@
 				
 				$stmt = $mysqli->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
 				
-				//echo $mysqli->error;
-				//echo $stmt->error;
+				echo $mysqli->error;
+				
 		
-				$stmt->bind_param("ssss", $create_fist_name, $create_last_name, $create_email, $password_hash);
+				$stmt->bind_param("ssss", $create_first_name, $create_last_name, $create_email, $password_hash);
 				$stmt->execute();
+				echo $stmt->error;
 				$stmt->close();
 
 			}
