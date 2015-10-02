@@ -83,13 +83,13 @@
 			if(empty($_POST["create_password"])){
 				$create_password_error = "see väli on kohustuslik";
 			}else{
-				if(strlen($_POST["create_password"]) < 8) {
+				if(strlen($_POST["create_password"]) > 8) {
 					$create_password_error = "Peab olema vähemalt 8 tähemärki pikk!";
 				}else{
 						$create_password = cleanInput($_POST["create_password"]);
 					}
 			
-		
+			}
 			if(empty($_POST["create_name"])){
 				$create_name_error = "see väli on kohustuslik";
 			}else{
@@ -100,10 +100,14 @@
 			if(empty($_POST["create_age"])){
 				$create_age_error = "see väli on kohustuslik";
 			}else{
-				if $create_age
-				$create_age = cleanInput($_POST["create_age"]);
+				var_dump($_POST["create_age"]);
+				var_dump(intval($_POST["create_age"]));
+				if ((intval($_POST["create_age"])) == 0){
+					$create_age_error = "Peab sisestama arvu";
+						}else{
+							$create_age = cleanInput($_POST["create_age"]);
+						}
 			}
-			
 			if($create_email_error == "" && $create_password_error == "" && $create_name_error == "" && $create_age_error == ""){
 				echo "Võib kasutajat luua!. user on ".$create_email." j parool on ".$create_password;
 				
@@ -147,9 +151,9 @@
 	<h2>Create user</h2>
 	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="create_email" type="email" placeholder="E-post" value="<?php echo $create_email; ?>"> <?php echo $create_email_error; ?><br><br>
-  	<input name="create_password" type="password" placeholder="Parool"> <?php echo $create_password_error; ?> <br><br>
-	<input name="create_name" type="string" placeholder="eesnimi"> <?php echo $create_name_error; ?> <br><br>
-	<input name="create_age" type="integer" placeholder="vanus"> <?php echo $create_age_error; ?> <br><br>
+  	<input name="create_password" type="password" placeholder="Parool" value="<?php echo $create_password; ?>"> <?php echo $create_password_error; ?> <br><br>
+	<input name="create_name" type="string" placeholder="eesnimi" value="<?php echo $create_name; ?>"> <?php echo $create_name_error; ?> <br><br>
+	<input name="create_age" type="integer" placeholder="vanus" value="<?php echo $create_age; ?>"> <?php echo $create_age_error; ?> <br><br>
   	<input type="submit" name="create" value="Create user">
 	</form>
 	
