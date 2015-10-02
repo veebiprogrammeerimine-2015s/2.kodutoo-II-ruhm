@@ -1,6 +1,7 @@
 <?php
-	
-	//echo $_POST["email"];
+	require_once("../config.php");
+	$database = "if15_sizen";
+	$mysqli = new mysqli($servername, $username, $password, $database);
 	
 	//Defineerime muutujad
 	$email_error = "";
@@ -25,57 +26,88 @@
 		
 			//echo "jah";
 		
-			// kas e-post on t¸hi
+			// kas e-post on t√ºhi
 			if( empty($_POST["email"]) ) {
 			
-			// jah oli t¸hi
-				$email_error = "See v‰li on kohustuslik";
+			// jah oli t√ºhi
+				$email_error = "See v√§li on kohustuslik";
 			}else{
-				//puhastame ¸leliigsetest s¸mbolitest
+				//puhastame √ºleliigsetest s√ºmbolitest
 				$email = cleanInput($_POST["email"]);
 			}
 			
 		
-			// kas parool on t¸hi
+			// kas parool on t√ºhi
 			if( empty($_POST["password"]) ) {
 			
-				// jah oli t¸hi
-				$password_error = "See v‰li on kohustuslik";
+				// jah oli t√ºhi
+				$password_error = "See v√§li on kohustuslik";
 			}else{
 				$password = cleanInput($_POST["password"]);
 			}
+			if($password_error == "" && $email_error == ""){
+				echo "v√µib sisse logida! User on ".$email." ja pw on ".$password;
+				
+				$password_hash = hash("sha512", $password);
+				$stmt = $mysqli->prepare("SELECT id, email FROM users WHERE email=? AND password=?");
+				$stmt->bind_param("ss", $email, $password_hash);
+				$stmt->bind_result($id_from_db, $email_from_db);
 
+				$stmt->execute();
+				
+				//vaatame kas saime andmebaasist k√§tte
+				if($stmt->fetch()){
+					
+					echo "  kasutaja id=".$id_from_db;
+				}else{
+					echo "wrong password or email";
+				}
+				
+				 $stmt->close();
+			}
 			
 		}
 		
+		
 		if(isset($_POST["create"])){
 			if(empty($_POST["create_email"])){
-				$create_email_error = "see v‰li on kohustuslik";
+				$create_email_error = "see v√§li on kohustuslik";
 			}else{
 				$create_email = cleanInput($_POST["create_email"]);
 			}
 	
 			if(empty($_POST["create_password"])){
-				$create_password_error = "see v‰li on kohustuslik";
+				$create_password_error = "see v√§li on kohustuslik";
 			}else{
-				if(strlen($_POST["create_password"]) < 8) {
-					$create_password_error = "Peab olema v‰hemalt 8 t‰hem‰rki";
-				}else{
 					$create_password = cleanInput($_POST["create_password"]);
 				}
-			}
+			
 		
 			if(empty($_POST["create_name"])){
-				$create_name_error = "see v‰li on kohustuslik";
+				$create_name_error = "see v√§li on kohustuslik";
 			}else{
 				$create_name = cleanInput($_POST["create_name"]);
 			}
 		
 		
 			if(empty($_POST["create_age"])){
-				$create_age_error = "see v‰li on kohustuslik";
+				$create_age_error = "see v√§li on kohustuslik";
 			}else{
 				$create_age = cleanInput($_POST["create_age"]);
+			}
+			
+			if($create_email_error == "" && $create_password_error == "" && $create_name_error == "" && $create_age_error == ""){
+				echo "V√µib kasutajat luua!. user on ".$create_email." j parool on ".$create_password;
+				
+				$password_hash = hash("sha512", "$create_password");
+				echo "<br>";
+				echo $password_hash;
+				
+				$stmt = $mysqli->prepare("INSERT INTO users (email, password, name, age) VALUES (?, ?, ?, ?)");
+				$stmt->bind_param("sssi", $create_email, $password_hash, $create_name, $create_age);
+				$stmt->execute();
+				$stmt->close();
+				
 			}
 		}
 		
@@ -87,7 +119,9 @@
   	$data = htmlspecialchars($data);
   	return $data;
   }
+  $mysqli->close();
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Login page</title>
