@@ -77,7 +77,7 @@ else{
 
 <?php
 	$page_title = "Login leht";
-	$file_name = "login.php";
+	$file_name = "";
 ?>
 
 
