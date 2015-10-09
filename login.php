@@ -7,7 +7,7 @@
 	// LOGIN.PHP
 	
 	// ühenduse loomiseks kasuta
-	require_once("../../config.php");
+	require_once("../config.php");
 	$database = "if15_vitamak";
 	$mysqli = new mysqli($servername, $username, $password, $database);
 
@@ -25,22 +25,22 @@
 	
 	// ПРОВЕРЯЕМ НАЖАЛ ЛИ КТО КНОПКУ СЛ
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
-		if(isset($_POST["login"])){
 		
 		//echo "ktonibuty nazhimal knopku";
 		//======================================================================================
 		//===================CREATE LOG ========================================================
 		//======================================================================================
 		//======================================================================================
-		//.===============================================================
-		//======================================================================================
-	if (empty($_POST["email"])) {
-				if ( empty($_POST["email"]) ) {
+		
+		if(isset($_POST["login"])){
+		
+			if ( empty($_POST["email"]) ) {
 				$email_error = "See väli on kohustuslik";
 			}else{
-				// puhastame muutuja võimalikest üleliigsetest sümbolitest
-				$email = cleanInput($_POST["email"]);
+			// puhastame muutuja võimalikest üleliigsetest sümbolitest
+			$email = cleanInput($_POST["email"]);
 			}
+			
 			if ( empty($_POST["password"]) ) {
 				$password_error = "See väli on kohustuslik";
 			}else{
@@ -68,14 +68,10 @@
 					// tühi, ei leidnud , ju siis midagi valesti
 					echo "Wrong password or email!";
 					
-				}
-				
-				$stmt->close();
-			
+			}	
 			}
+			} 
 		} // login if end
-		}
-		}
 		
 		
 			 //======================================================================================
@@ -115,7 +111,7 @@
 				$stmt->close();
 			}
     } // create if end
-		
+	 	
 		
 		//funktsioon, mis eemaldab kõikvõimaliku üleliigse tekstist
 		function cleanInput($data) {
@@ -138,7 +134,7 @@
 
 
 
-<?php require_once("../header.php"); ?>
+<?php require_once("header.php"); ?>
 		<h2>Log in</h2>
 		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 			<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?><br><br>
@@ -157,4 +153,4 @@
 			<input name="create" type="submit" value="create user" > <br><br>
 			
 		</form>
-<?php require_once("../footer.php"); ?>
+<?php require_once("footer.php"); ?>
