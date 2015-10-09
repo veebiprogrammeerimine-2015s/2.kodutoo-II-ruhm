@@ -14,6 +14,7 @@ $password_error="";
 //kontrollin kas keegi vajutas nuppu
 if($_SERVER["REQUEST_METHOD"]=="POST"){
 	
+	
 
 // kontrollin mis nuppu vajutati
 		if(isset($_POST["login"])){
@@ -29,19 +30,20 @@ $email = cleanInput($_POST["email"]);
 }
 //kas parool on tühi
 	//jah on tühi
-if(empty($_POST["Password"])){
+if(empty($_POST["password"])){
 		$password_error = "See väli on kohustuslik";
 }
-else{
-				$password = cleanInput($_POST["password"]);
-			}
+else{	
+		$password = cleanInput($_POST["password"]);
+		}
 			// Kui oleme siia jõudnud, võime kasutaja sisse logida
 			if($password_error == "" && $email_error == ""){
+				
 				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
 				
 				$password_hash = hash("sha512", $password);
 				
-				$stmt = $mysqli->prepare("SELECT id, email FROM kontod32 WHERE email=? AND password=?");
+				$stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash);
 				
 				//paneme vastuse muutujatesse
@@ -62,17 +64,22 @@ else{
 				$stmt->close();
 			}
 	}
-	function cleanInput($data) {
-  	$data = trim($data);
-  	$data = stripslashes($data);
-  	$data = htmlspecialchars($data);
-  	return $data;
-  }
+	
 		}
 		
 	
 	//Paneme ühenduse kinni
 	$mysqli->close();
+	
+	
+	
+	
+	function cleanInput($data) {
+		$data = trim($data);
+		$data = stripslashes($data);
+		$data = htmlspecialchars($data);
+  	return $data;
+  }
 ?>
 
 <?php
