@@ -134,7 +134,7 @@
 
 
 
-<?php require_once("header.php"); ?>
+<?php require_once("start/header.php"); ?>
 		<h2>Log in</h2>
 		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 			<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?><br><br>
@@ -153,4 +153,4 @@
 			<input name="create" type="submit" value="create user" > <br><br>
 			
 		</form>
-<?php require_once("footer.php"); ?>
+<?php require_once("start/footer.php"); ?>
