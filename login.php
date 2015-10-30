@@ -171,10 +171,10 @@
 	
 	<h2>Create User</h2>
 	<form action="login.php" method="post">
-		<input name="create_login" type="text" placeholder="Kasutaja nimi"> <?php echo $createuserlogin_error; ?><br><br>
-		<input name="create_email" type="email" placeholder="E-post" value="<?php echo $createuseremail; ?>"> <?php echo $createuseremail_error; ?><br><br>
-		<input name="create_password" type="password" placeholder="Parool"> <?php echo $createuserpassword_error; ?><br><br>
-		<input name="create_adress" type="text" placeholder="Aadress"> <?php echo $createuseradress_error; ?><br><br>
-		<input name="create_telephone" type="telephone" placeholder="Telefon"> <?php echo $createusertelephone_error; ?><br><br>
-		<input type="submit" value="Registreeri"><br><br>
+		<input name="createuserlogin" type="text" placeholder="Kasutaja nimi"> <?php echo $createuserlogin_error; ?><br><br>
+		<input name="createuseremail" type="email" placeholder="E-post" value="<?php echo $createuseremail; ?>"> <?php echo $createuseremail_error; ?><br><br>
+		<input name="createuserpassword" type="password" placeholder="Parool"> <?php echo $createuserpassword_error; ?><br><br>
+		<input name="createuseradress" type="text" placeholder="Aadress"> <?php echo $createuseradress_error; ?><br><br>
+		<input name="createusertelephone" type="telephone" placeholder="Telefon"> <?php echo $createusertelephone_error; ?><br><br>
+		<input type="submit" name="create" value="Registreeri"><br><br>
 <?php require_once("footer.php"); ?>
