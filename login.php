@@ -96,6 +96,8 @@
 			$createuseremail_error = "See väli on kohustuslik";
 		}else{
 				$createuseremail = CleanInput($_POST["createuseremail"]);
+				
+				echo "salvestan ab'i ".$email;
 		}
 	
 		
@@ -107,6 +109,8 @@
  					$createuserpassword_error = "Peab olema vähemalt 8 tähemärki pikk!";
  				}else{
  					$createuserpassword = cleanInput($_POST["createuserpassword"]);
+					
+					echo "salvestan ab'i ".$password;
  				}
 	
 		
@@ -115,12 +119,16 @@
 			$createuseradress_error = "See väli on kohustuslik";
 		}else {
 				$createuseradress = CleanInput($_POST["createuseradress"]);
+				
+				echo "salvestan ab'i ".$adress;
 		}
 		}
 		if(empty($_POST["createusertelephone"])){
 			$createusertelephone_error = "See väli on kohustuslik";
 		}else {
 				$createusertelephone = CleanInput($_POST["createusertelephone"]);
+				
+				echo "salvestan ab'i ".$telephone;
 	}
 		}
 		if(	$createuserlogin_error = "" && $createuseremail_error == "" && $createuserpassword_error == "" &&$createuseradress_error == "" && $createusertelephone_error = ""){
