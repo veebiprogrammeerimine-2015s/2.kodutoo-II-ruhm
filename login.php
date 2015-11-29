@@ -22,6 +22,8 @@
 	//Defineerime muutujad vigased
 	$email_error = "";
 	$password_error = "";
+	$createuseremail_error = "";
+	$createuserpassword_error = "";
 	$createuserlogin_error = "";
 	$createuseradress_error = "";
 	$createusertelephone_error = "";
@@ -90,12 +92,11 @@
 		if(empty($_POST["createuserlogin"])){
 			$createuserlogin_error = "See väli on kohustuslik";
 		}else {
-				$createuserlogin = CleanInput($_POST["createuserlogin"]);
+				$createuserlogin = cleanInput($_POST["createuserlogin"]);
 			}
 			
 			if($createuserlogin_error == ""){
 				
-				echo "salvestan ab'i ".$login;
 				
  			}
 	
@@ -103,9 +104,8 @@
 		if(empty($_POST["createuseremail"])){
 			$createuseremail_error = "See väli on kohustuslik";
 		}else{
-				$email = CleanInput($_POST["email"]);
-				
-				echo "salvestan ab'i ".$email;
+				$email = cleanInput($_POST["email"]);
+	
 		}
 	
 		
@@ -117,8 +117,7 @@
  					$createuserpassword_error = "Peab olema vähemalt 8 tähemärki pikk!";
  				}else{
  					$createuserpassword = cleanInput($_POST["createuserpassword"]);
-					
-					echo "salvestan ab'i ".$password;
+		
  				}
 	
 		
@@ -126,17 +125,15 @@
 		if(empty($_POST["createuseradress"])){
 			$createuseradress_error = "See väli on kohustuslik";
 		}else {
-				$createuseradress = CleanInput($_POST["createuseradress"]);
-				
-				echo "salvestan ab'i ".$adress;
+				$createuseradress = cleanInput($_POST["createuseradress"]);
+	
 		}
 		}
 		if(empty($_POST["createusertelephone"])){
 			$createusertelephone_error = "See väli on kohustuslik";
 		}else {
-				$createusertelephone = CleanInput($_POST["createusertelephone"]);
-				
-				echo "salvestan ab'i ".$telephone;
+				$createusertelephone = cleanInput($_POST["createusertelephone"]);
+		
 		}
 		
 			if(	$createuserlogin_error = "" && $createuseremail_error == "" && $createuserpassword_error == "" &&$createuseradress_error == "" && $createusertelephone_error = ""){
@@ -151,17 +148,19 @@
 					//echo $stmt->error;
 					//asendame ? märgid muutujate väärtuste
 					// ss - s tähendab string iga muutuja kohta
-					$stmt->bind_param("ss", $createuseremail, $password_hash,$createuserlogin, $createuseradress, $createusertelephone);
+					$stmt->bind_param("ss", $createuseremail, $password_hash, $createuserlogin, $createuseradress, $createusertelephone);
 					$stmt->execute();
 					$stmt->close(); 
 			}//create if end
 		}
-		function test_input($data) {
+
+	}	
+	
+			function test_input($data) {
 			$data = trim($data);
 			$data = stripslashes($data);
 			$data = htmlspecialchars($data);
 			return $data;
-	}	
 	// paneme ühenduse kinni
    $mysqli->close();
 	}
