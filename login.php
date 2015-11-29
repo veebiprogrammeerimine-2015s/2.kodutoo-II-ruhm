@@ -1,5 +1,16 @@
 <?php
 	
+	//CREATE TABLE user_php (
+    //id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    //email VARCHAR(255) NOT NULL,
+	//password VARCHAR(128),
+	//login VARCHAR(128),
+	//adress VARCHAR(255),
+	//telephone INT,
+    //created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //UNIQUE(email)
+	//);
+	
 	//ma tahaksin tegeleda kunstitarbete e-poega, kus on registreerimissüsteem, 
 	//tarbete nimikiri, iga tarbete kirjeldus, on võimalik tarbed tellida, ja tellimise vorm
 	
@@ -12,22 +23,19 @@
 	$email_error = "";
 	$password_error = "";
 	$createuserlogin_error = "";
-	$createuseremail_error = "";
-	$createuserpassword_error = "";
 	$createuseradress_error = "";
 	$createusertelephone_error = "";
 	//Defineerime muutujad õiged
-	$email = "";
-	$password = "";
-	$createuserlogin = "";
 	$createuseremail = "";
 	$createuserpassword = "";
+	$createuserlogin = "";
 	$createuseradress = "";
 	$createusertelephone = "";
 	
 	
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
+		echo "siin";
 		//***********
 		//LOGI SISSE*
 		//***********
@@ -95,7 +103,7 @@
 		if(empty($_POST["createuseremail"])){
 			$createuseremail_error = "See väli on kohustuslik";
 		}else{
-				$createuseremail = CleanInput($_POST["createuseremail"]);
+				$email = CleanInput($_POST["email"]);
 				
 				echo "salvestan ab'i ".$email;
 		}
@@ -129,25 +137,25 @@
 				$createusertelephone = CleanInput($_POST["createusertelephone"]);
 				
 				echo "salvestan ab'i ".$telephone;
-	}
 		}
-		if(	$createuserlogin_error = "" && $createuseremail_error == "" && $createuserpassword_error == "" &&$createuseradress_error == "" && $createusertelephone_error = ""){
- 				echo "Võib kasutajat luua! Kasutajanimi on ".$createuseremail." ja parool on ".$createuserpassword;
-				$password_hash = hash("sha512", $createuserpassword);
- 				echo "<br>";
- 				echo $password_hash;
- 				
- 				$stmt = $mysqli->prepare("INSERT INTO user_php (email, password, login, adress, telephone) VALUES (?, ?, ?, ?, ?)");
- 				
- 				//echo $mysqli->error;
- 				//echo $stmt->error;
- 				//asendame ? märgid muutujate väärtuste
- 				// ss - s tähendab string iga muutuja kohta
- 				$stmt->bind_param("ss", $create_email, $password_hash);
- 				$stmt->execute();
- 				$stmt->close();
-		}//create if end
 		
+			if(	$createuserlogin_error = "" && $createuseremail_error == "" && $createuserpassword_error == "" &&$createuseradress_error == "" && $createusertelephone_error = ""){
+					echo "Võib kasutajat luua! Kasutajanimi on ".$createuseremail." ja parool on ".$createuserpassword;
+					$password_hash = hash("sha512", $createuserpassword);
+					echo "<br>";
+					echo $password_hash;
+					
+					$stmt = $mysqli->prepare("INSERT INTO user_php (email, password, login, adress, telephone) VALUES (?, ?, ?, ?, ?)");
+					
+					//echo $mysqli->error;
+					//echo $stmt->error;
+					//asendame ? märgid muutujate väärtuste
+					// ss - s tähendab string iga muutuja kohta
+					$stmt->bind_param("ss", $createuseremail, $password_hash,$createuserlogin, $createuseradress, $createusertelephone);
+					$stmt->execute();
+					$stmt->close(); 
+			}//create if end
+		}
 		function test_input($data) {
 			$data = trim($data);
 			$data = stripslashes($data);
@@ -172,7 +180,7 @@
 	<h2>Create User</h2>
 	<form action="login.php" method="post">
 		<input name="createuserlogin" type="text" placeholder="Kasutaja nimi"> <?php echo $createuserlogin_error; ?><br><br>
-		<input name="createuseremail" type="email" placeholder="E-post" value="<?php echo $createuseremail; ?>"> <?php echo $createuseremail_error; ?><br><br>
+		<input name="createuseremail" type="email" placeholder="E-post"> <?php echo $createuseremail_error; ?><br><br>
 		<input name="createuserpassword" type="password" placeholder="Parool"> <?php echo $createuserpassword_error; ?><br><br>
 		<input name="createuseradress" type="text" placeholder="Aadress"> <?php echo $createuseradress_error; ?><br><br>
 		<input name="createusertelephone" type="telephone" placeholder="Telefon"> <?php echo $createusertelephone_error; ?><br><br>
