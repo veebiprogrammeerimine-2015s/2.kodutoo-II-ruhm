@@ -89,28 +89,22 @@
 		//kas kasutajanime loomine on tühi
 	if(isset($_POST["create"])){
 		
-		if(empty($_POST["createuserlogin"])){
+		if( empty($_POST["createuserlogin"]) ){
 			$createuserlogin_error = "See väli on kohustuslik";
 		}else {
 				$createuserlogin = cleanInput($_POST["createuserlogin"]);
 			}
-			
-			if($createuserlogin_error == ""){
-				
-				
- 			}
 	
 		//kas emaili loomine on tühi
-		if(empty($_POST["createuseremail"])){
+		if( empty($_POST["createuseremail"]) ){
 			$createuseremail_error = "See väli on kohustuslik";
 		}else{
-				$email = cleanInput($_POST["email"]);
-	
+				$createuseremail = cleanInput($_POST["createuseremail"]);
 		}
 	
 		
 		//kas parooli loomine on tühi
-		if(empty($_POST["createuserpassword"])){
+		if( empty($_POST["createuserpassword"]) ){
 			$createuserpassword_error = "See väli on kohustuslik";
 		}else {
  				if(strlen($_POST["createuserpassword"]) < 8) {
@@ -120,7 +114,6 @@
 		
  				}
 	
-		
 		//kas aadressi loomine on tühi
 		if(empty($_POST["createuseradress"])){
 			$createuseradress_error = "See väli on kohustuslik";
@@ -128,12 +121,10 @@
 				$createuseradress = cleanInput($_POST["createuseradress"]);
 	
 		}
-		}
-		if(empty($_POST["createusertelephone"])){
+		if( empty($_POST["createusertelephone"])){
 			$createusertelephone_error = "See väli on kohustuslik";
 		}else {
 				$createusertelephone = cleanInput($_POST["createusertelephone"]);
-		
 		}
 		
 			if(	$createuserlogin_error = "" && $createuseremail_error == "" && $createuserpassword_error == "" &&$createuseradress_error == "" && $createusertelephone_error = ""){
@@ -141,6 +132,7 @@
 					$password_hash = hash("sha512", $createuserpassword);
 					echo "<br>";
 					echo $password_hash;
+
 					
 					$stmt = $mysqli->prepare("INSERT INTO user_php (email, password, login, adress, telephone) VALUES (?, ?, ?, ?, ?)");
 					
@@ -148,7 +140,7 @@
 					//echo $stmt->error;
 					//asendame ? märgid muutujate väärtuste
 					// ss - s tähendab string iga muutuja kohta
-					$stmt->bind_param("ss", $createuseremail, $password_hash, $createuserlogin, $createuseradress, $createusertelephone);
+					$stmt->bind_param("sssss", $createuseremail, $password_hash, $createuserlogin, $createuseradress, $createusertelephone);
 					$stmt->execute();
 					$stmt->close(); 
 			}//create if end
@@ -156,7 +148,7 @@
 
 	}	
 	
-			function test_input($data) {
+			function cleanInput($data) {
 			$data = trim($data);
 			$data = stripslashes($data);
 			$data = htmlspecialchars($data);
@@ -165,23 +157,32 @@
    $mysqli->close();
 	}
 ?>
-<?php
+ <?php
 	$page_title = "Login leht";
 	$file_name = "login.php";
 ?>
-<?php require_once("header.php"); ?>
-	<h2>Login</h2>
-	<form action="login.php" method="post">
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+	<h2>Log in</h2>
+	 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 		<input name="email" type="email" placeholder="E-post"> <?php echo $email_error; ?><br><br>
 		<input name="password" type="password" placeholder="Parool"> <?php echo $password_error; ?><br><br>
 		<input type="submit" value="Logi sisse"><br><br>
-	
+	</form>
 	<h2>Create User</h2>
-	<form action="login.php" method="post">
+	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 		<input name="createuserlogin" type="text" placeholder="Kasutaja nimi"> <?php echo $createuserlogin_error; ?><br><br>
-		<input name="createuseremail" type="email" placeholder="E-post"> <?php echo $createuseremail_error; ?><br><br>
+		<input name="createuseremail" type="email" placeholder="E-post" value="<?php echo $createuseremail; ?>"> <?php echo $createuseremail_error; ?><br><br>
 		<input name="createuserpassword" type="password" placeholder="Parool"> <?php echo $createuserpassword_error; ?><br><br>
 		<input name="createuseradress" type="text" placeholder="Aadress"> <?php echo $createuseradress_error; ?><br><br>
 		<input name="createusertelephone" type="telephone" placeholder="Telefon"> <?php echo $createusertelephone_error; ?><br><br>
 		<input type="submit" name="create" value="Registreeri"><br><br>
-<?php require_once("footer.php"); ?>
+		
+  </form>
+<body>
+<html>
