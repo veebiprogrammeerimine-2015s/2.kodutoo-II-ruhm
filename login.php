@@ -56,6 +56,8 @@
 		}else{
 			$password = cleanInput($_POST["password"]);
 		} 		
+		
+		echo "siin";
  //Kui oleme siia jõudnud, võime kasutaja sisse logida
  			if($password_error == "" && $email_error == ""){
  				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
@@ -88,7 +90,7 @@
 		//LOO KASUTAJA*
 		//*************
 		
-	if(isset($_POST["create"])){
+	if(isset($_POST["create"])){ 
 		//kas kasutajanime loomine on tühi
 		if( empty($_POST["createuserlogin"]) ){
 			$createuserlogin_error = "See väli on kohustuslik";
@@ -114,7 +116,7 @@
  					$createuserpassword = cleanInput($_POST["createuserpassword"]);
 		
  				}
-	
+		}
 		//kas aadressi loomine on tühi
 		if(empty($_POST["createuseradress"])){
 			$createuseradress_error = "See väli on kohustuslik";
@@ -127,8 +129,11 @@
 		}else {
 				$createusertelephone = cleanInput($_POST["createusertelephone"]);
 		}
+		//echo "siin";
 		
-			if(	$createuserlogin_error = "" && $createuseremail_error == "" && $createuserpassword_error == "" &&$createuseradress_error == "" && $createusertelephone_error = ""){
+			if(	$createuserlogin_error == "" && $createuseremail_error == "" && $createuserpassword_error == "" && $createuseradress_error == "" && $createusertelephone_error == ""){
+				//echo "siin";
+				
 					echo "Võib kasutajat luua! Kasutajanimi on ".$createuseremail." ja parool on ".$createuserpassword;
 					$password_hash = hash("sha512", $createuserpassword);
 					echo "<br>";
@@ -141,7 +146,7 @@
 					//echo $stmt->error;
 					//asendame ? märgid muutujate väärtuste
 					// ss - s tähendab string iga muutuja kohta
-					$stmt->bind_param("sssss",  $createuserlogin, $createuseremail, $password_hash, $createuseradress, $createusertelephone);
+					$stmt->bind_param("sssss", $createuseremail, $password_hash, $createuserlogin, $createuseradress, $createusertelephone);
 					$stmt->execute();
 					$stmt->close(); 
 			}//create if end
@@ -170,7 +175,7 @@
 	 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 		<input name="email" type="email" placeholder="E-post"> <?php echo $email_error; ?><br><br>
 		<input name="password" type="password" placeholder="Parool"> <?php echo $password_error; ?><br><br>
-		<input type="submit" value="Logi sisse"><br><br>
+		<input type="submit" name="login" value="Logi sisse"><br><br>
 	</form>
 	<h2>Create User</h2>
 	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
