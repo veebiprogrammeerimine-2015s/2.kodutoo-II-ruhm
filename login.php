@@ -1,8 +1,10 @@
 <?php
-
-	//echo $_POST["email"];
 	
-	//Defineerime muutuja
+	require_once("../config.php");
+	$database = "if15_janilv";
+	$mysqli = new mysqli($servername, $username, $password, $database);
+	
+  // muuutujad errorite jaoks
 	$email_error ="";
 	$password_error = "";
 	$first_name_error = "";
@@ -12,72 +14,113 @@
 	$cpassword_error ="";
 	
 	
-	//kontrollin, kas keegi vajutas nuppu
+	
+  // muutujad väärtuste jaoks
+	$email ="";
+	$password = "";
+	$first_name = "";
+	$last_name = "";
+	$date = "";
+	$cemail ="";
+	$cpassword ="";
+
+
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
 
-		echo "jah";
-	
-		//kas e-post on tühi
-		if ( empty($_POST["email"])	) {
-			
-			//jah oli tühi
-			$email_error = "See väli on kohustuslik";
-	
-		}
+    // *********************
+    // **** LOGI SISSE *****
+    // *********************
+		if(isset($_POST["login"])){
 
-	// kas parool on tühi
-		if ( empty($_POST["password"]) ) {
-			$password_error = "See väli on kohustuslik";
-		} else {
-			
-			//Parool pole tühi
-			if(strlen($_POST["password"]) < 6) {
+			if ( empty($_POST["email"]) ) {
+				$email_error = "See väli on kohustuslik";
+			}else{
+        // puhastame muutuja võimalikest üleliigsetest sümbolitest
+				$email = cleanInput($_POST["email"]);
+			}
+
+			if ( empty($_POST["password"]) ) {
+				$password_error = "See väli on kohustuslik";
+			}else{
+				$password = cleanInput($_POST["password"]);
+			}
+
+      // Kui oleme siia jõudnud, võime kasutaja sisse logida
+			if($password_error == "" && $email_error == ""){
+				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
 				
-				$password_error = "Parool peab olema vähemalt 6 tähemärki pikk.";
-			}		
-		}
+				$password_hash = hash("sha512", $password);
+				
+			}
+
+		} // login if end
+
+    // *********************siia tuleb lisada logi sisse issetid, et süstemaatika 
+    // ** LOO KASUTAJA *****
+    // *********************
+    if(isset($_POST["create"])){
 		
 		
-		if ( empty($_POST["first_name"])	) {
-			
-			//jah oli tühi
-			$first_name_error = "See väli on kohustuslik";
-	
-		}
+		if ( empty($_POST["first_name"]) ) {
+				$first_name_error = "See väli on kohustuslik";
+			}else{
+        // puhastame muutuja võimalikest üleliigsetest sümbolitest
+				$first_name = cleanInput($_POST["first_name"]);
+			}
 		
-		if ( empty($_POST["last_name"])	) {
-			
-			//jah oli tühi
-			$last_name_error = "See väli on kohustuslik";
-	
-		}
+		if ( empty($_POST["last_name"])	) {			
+				$last_name_error = "See väli on kohustuslik";
+			}else{
+				$last_name = cleanInput($_POST["last_name"]);
+			}
 		
 		if ( empty($_POST["date"])	) {
-			
-			//jah oli tühi
-			$date_error = "See väli on kohustuslik";
-	
-		}
+				$date_error = "See väli on kohustuslik";
+			}else{
+				$date = cleanInput($_POST["date"]);
+			}
 		
-				if ( empty($_POST["cemail"])	) {
-			
-			//jah oli tühi
-			$cemail_error = "See väli on kohustuslik";
-	
-		}
 		
-						if ( empty($_POST["cpass"])	) {
-			
-			//jah oli tühi
+		
+		if ( empty($_POST["cemail"])	) {
+				$cemail_error = "See väli on kohustuslik";	
+			}else{
+				$cemail = cleanInput($_POST["cemail"]);
+			}
+		
+		if ( empty($_POST["cpass"])	) {
 			$cpassword_error = "See väli on kohustuslik";
-	
+			}else{
+			$cpassword = cleanInput($_POST["cpass"]);
+			}
+
+
+		if(	$cemail_error == "" && $cpassword_error == ""){
+			echo "Võib kasutajat luua! Kasutajanimi on ".$cemail." ja parool on ".$cpassword; //cepass ja cemail siia kirja
+			
+			$password_hash = hash("sha512", $cpassword);
+			echo "<br>";
+			echo $password_hash;
+			
+			
 		}
-		
+
+    } // create if end
+
 	}
-	
-	
-	
+
+  // funktsioon, mis eemaldab kõikvõimaliku üleliigse tekstist
+  function cleanInput($data) {
+  	$data = trim($data);
+  	$data = stripslashes($data);
+  	$data = htmlspecialchars($data);
+  	return $data;
+  }
+  
+  $mysqli->close();
+
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Login Page</title>
@@ -88,7 +131,7 @@
 	<form action="login.php" method="post">
 	<input name="email" type="email" placeholder="E-post" > <?php echo $email_error ?>	<br><br>
 	<input name="password" type="password" placeholder="Parool" > <?php echo $password_error ?>	<br><br>
-	<input type="submit" value="Logi sisse" >	<br><br>
+	<input type="submit" name="login" value="Logi sisse" >	<br><br>
 	</form>
 	
 	
@@ -99,11 +142,7 @@
 	<input name="first_name" type="text" placeholder="Eesnimi">*<?php echo $first_name_error ?><br><br>
 	<input name="last_name" type="name" placeholder="Perekonnanimi">*<?php echo $last_name_error ?><br><br>
 	<input name="date" type="age" placeholder="Vanus">*<?php echo $date_error ?><br><br>
-	<input type="submit" value="Registeeri">
+	<input type="submit" name="create" value="Registeeri">
 	</form>
-	MVP idee
-	<p>Idee seisneb selles, et inimesed, kes käivad jõusaalis, saaks mugavalt oma järgida oma toitumist.
-	 Koostaks kalkulaatori(vanus, rasvaprotsent, kui palju liigutakse nädalas) ja vastavalt oma soovidele(kaalu kaotus/massi suurendamine) näeks inimene, kuidas toiteväärtust muuta ja kuidas õigesti süüa.
-	 Et asja natuke omamoodi luua, siis võiks olla lisa võimalus, et koostab päeva ja hiljem nädalaplaani ja lisab sellele kõrvale retseptid, et poest lihtsam asju osta oleks ja saaks täpselt toitumisnõuded ära täita.</p>
 </body>
 </html>
