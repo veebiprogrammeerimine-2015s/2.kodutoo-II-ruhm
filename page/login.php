@@ -30,7 +30,7 @@
 	$createemail = "";
 	$createpassword = "";
 	$firstname = "";
-	$firstname = "";
+	$lastname = "";
 	
 	//kontrollin kas keegi vajutas nuppu
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -53,7 +53,8 @@
 				$password = cleanInput($_POST["password"]);
 			}
 		
-		} elseif(isset($_POST["create"])){
+		} 
+		if(isset($_POST["create"])){
 			
 			// CREATE USER NUPP
 			
@@ -94,15 +95,14 @@
 				echo "<br>";
 				echo $password_hash;
 				
-				$stmt = $mysqli->prepare("INSERT INTO kasutajad (email, password) VALUE (?, ?)");
+				$stmt = $mysqli->prepare("INSERT INTO kasutajad (email, password, firstname, lastname ) VALUE (?, ?, ?, ?)");
 				
-				//echo $mysqli->error;
-				//echo $stmt->error;
+				
 				
 				
 				//asendame küsimärgid muutujate väärtustega
 				//ss - s tähendab string iga muutjua kohta
-				$stmt->bind_param("ss", $create_email, $password_hash);
+				$stmt->bind_param("ssss", $create_email, $password_hash, $firstname, $lastname);
 				$stmt->execute();
 				$stmt->close();
 			}
@@ -131,18 +131,18 @@
 	</head>
 	<body>		
 		<h2>Login</h2>
-		<form action="login.php" method="post"> 
-			<input name="email" type="email" placeholder="E-post"> <?php echo $email_error; ?> <br><br>
-			<input name="password" type="password" placeholder="Parool"> <?php echo $password_error; ?> <br><br>
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post"> 
+			<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?> <br><br>
+			<input name="password" type="password" placeholder="Parool" value="<?php echo $password; ?>"> <?php echo $password_error; ?> <br><br>
 			<input name="login" type="submit" value="Logi sisse"> <br><br>
 		</form>
 		<h2>Create user</h2>
-		<form action="login.php" method="post"> 
-			<input name="createemail" type="email" placeholder="E-post"> <?php echo $create_email_error; ?> <br><br>
-			<input name="createpassword" type="password" placeholder="Parool"> <?php echo $create_password_error; ?> <br><br>
-			<input name="createpassword" type="password" placeholder="Parool uuesti"> <?php echo $create_password_error; ?> <br><br>
-			<input name="firstname" type="text" placeholder="Eesnimi"> <?php echo $firstname_error; ?> <br><br>
-			<input name="lastname" type="text" placeholder="Perekonnanimi"> <?php echo $lastname_error; ?> <br><br>
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post"> 
+			<input name="createemail" type="email" placeholder="E-post" value="<?php echo $createemail; ?>"> <?php echo $create_email_error; ?> <br><br>
+			<input name="createpassword" type="password" placeholder="Parool" value="<?php echo $createpassword; ?>"> <?php echo $create_password_error; ?> <br><br>
+			<input name="createpassword" type="password" placeholder="Parool uuesti" value="<?php echo $createpassword; ?>"> <?php echo $create_password_error; ?> <br><br>
+			<input name="firstname" type="text" placeholder="Eesnimi" value="<?php echo $firstname; ?>"> <?php echo $firstname_error; ?> <br><br>
+			<input name="lastname" type="text" placeholder="Perekonnanimi" value="<?php echo $lastname; ?>"> <?php echo $lastname_error; ?> <br><br>
 			<input name="create" type="submit" value="Registreeru"> <br><br>
 		</form>
 	</body>
