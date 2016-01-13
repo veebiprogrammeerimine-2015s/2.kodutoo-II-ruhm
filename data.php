@@ -21,6 +21,14 @@
 	Minu tabelid <a href="tables.txt"> siin</a>
 </p>
 
+
+
+<!DOCTYPE html>
+<html>
+<h1>Vot, oled sisselogitud</h1>
+<p>hello, noh.</p>
+
+</body>
+</html>
+
 <?php require_once("menu.php"); ?>
-
-
