@@ -14,12 +14,11 @@
 ?>
 
 <p>
-	Tere, <?=$_SESSION["user_email"];?>
-	<a href="?logout=1"> Logi välja</a>
+	Tere, <?=$_SESSION["user_email"];?>  <li><a href="?logout=1"> Logi välja</a></li> 
 </p>
 
 <p>
-	Vaata sinu uus meili <a href="mail.php"> siin</a>
+	Minu tabelid <a href="tables.txt"> siin</a>
 </p>
 
 <?php require_once("menu.php"); ?>

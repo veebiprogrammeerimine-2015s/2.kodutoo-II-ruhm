@@ -8,10 +8,9 @@
 
 
 <div id="Menu">
- <h2>Menüü</h2>
+ <h2>Menu</h2>
  <li><a href="data.php">Profiil</a></li>
- <li><a href="mail.php">Vaata sõnumid</a></li>
- <li><a href="comment.php">Kirjuta sõnum</a></li>
+ <li><a href="?logout=1"> Logi välja</a></li> 
  
  </ul>
 </div>
