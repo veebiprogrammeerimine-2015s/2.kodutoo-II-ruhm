@@ -1,5 +1,5 @@
 <?php
-	require_once("../config.php");
+	require_once("../../config.php");
 	$database = "if15_areinlo_2";
 	$mysqli = new mysqli($servername, $username, $password, $database);
 	
