@@ -11,34 +11,28 @@
 $email_error="";
 $password_error="";
 
-//kontrollin kas keegi vajutas nuppu
-if($_SERVER["REQUEST_METHOD"]=="POST"){
+
 	
 	
 
-// kontrollin mis nuppu vajutati
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+    // *********************
+    // **** LOGI SISSE *****
+    // *********************
 		if(isset($_POST["login"])){
-
-	if(empty($_POST["email"])){
-		//jah oli tühi
-		$email_error = "See väli on kohustuslik";
-}
-else{
-
-//puhastame muutuja võimalikest üleliigsetest sümbolitest
-$email = cleanInput($_POST["email"]);
-}
-//kas parool on tühi
-	//jah on tühi
-if(empty($_POST["password"])){
-		$password_error = "See väli on kohustuslik";
-}
-else{	
-		$password = cleanInput($_POST["password"]);
-		}
-			// Kui oleme siia jõudnud, võime kasutaja sisse logida
+			if ( empty($_POST["email"]) ) {
+				$email_error = "See väli on kohustuslik";
+			}else{
+        // puhastame muutuja võimalikest üleliigsetest sümbolitest
+				$email = cleanInput($_POST["email"]);
+			}
+			if ( empty($_POST["password"]) ) {
+				$password_error = "See väli on kohustuslik";
+			}else{
+				$password = cleanInput($_POST["password"]);
+			}
+      // Kui oleme siia jõudnud, võime kasutaja sisse logida
 			if($password_error == "" && $email_error == ""){
-				
 				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
 				
 				$password_hash = hash("sha512", $password);
@@ -50,28 +44,21 @@ else{
 				$stmt->bind_result($id_from_db, $email_from_db);
 				$stmt->execute();
 				
+				//küsima kas AB'ist saime kätte
 				if($stmt->fetch()){
 					//leidis
-					echo "<br>";
-					echo"Kasutaja id=".$id_from_db;
+					echo "kasutaja id=".$id_from_db;
 				}else{
-					//tühi, ei leidnud, ju siis midagi valesti
-					echo "<br>";
+					// tühi, ei leidnud , ju siis midagi valesti
 					echo "Wrong password or email!";
 					
 				}
 				
 				$stmt->close();
 			}
+		} // login if end
+	
 	}
-	
-		}
-		
-	
-	//Paneme ühenduse kinni
-	$mysqli->close();
-	
-	
 	
 	
 	function cleanInput($data) {

@@ -1,9 +1,12 @@
-# 1. kodutöö (II rühm)
-
-## Kirjeldus
-
-1. Täienda tunnis tehtud kasutaja loomise vormi
-  * lisa sellele juurde enda arvates vajalikud väljad
-  * valideeri lisatud väljad
-  * anna kasutajale tagasisidet kui kohustuslik väli jäi tühjaks
-1. Mõtle välja [mvp](https://en.wikipedia.org/wiki/Minimum_viable_product) idee, millega edaspidi kursuse jooksul tegeled ja kirjelda seda paari lausega oma kasutaja loomise vormi lehel.
+Võimalda oma lehel kasutajat luua ja kontrollida sisselogimist (kui on õige trüki kasutaja id )
+Abi saad 4. tunnitööst
+OLULINE! ÄRA POSTITA GITHUBI GREENY MYSQL PAROOLE. Selleks toimi järgmiselt:
+loo eraldi fail config.php. Lisa sinna kasutaja ja parool ning tõsta see enda koduse töö kaustast ühe taseme võrra väljapoole
+$servername = "localhost";
+$username = "username";
+$password = "password";
+Andmebaasi nimi lisa aga kindlasti enda faili ja require_once käsuga küsi parool ja kasutajanimi config.php failist, siis saan kodust tööd lihtsamini kontrollida
+// ühenduse loomiseks kasuta
+require_once("../config.php");
+$database = "database";
+$mysqli = new mysqli($servername, $username, $password, $database);
