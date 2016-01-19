@@ -1,7 +1,6 @@
-
 <?php
 // ühenduse loomiseks kasuta
-	require_once("../../configglobal.php");
+	require_once("../../../../configglobal.php");
 	$database = "if15_taunlai_";
 	$mysqli = new mysqli($servername, $server_username, $server_password, $database);
 	
@@ -72,12 +71,15 @@ if(isset($_POST["create"])){
 			}
 		} // create if end
 	
-	function cleanInput($data) {
+	
+  
+}
+function cleanInput($data) {
   	$data = trim($data);
   	$data = stripslashes($data);
   	$data = htmlspecialchars($data);
   	return $data;
-  }
+	
 }
   //paneme ühenduse kinni
   $mysqli->close();
@@ -104,4 +106,6 @@ if(isset($_POST["create"])){
 	
 	
 <?php require_once("../footer.php"); ?>
+
+
 
