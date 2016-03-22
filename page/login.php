@@ -41,6 +41,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($password_error == "" && $email_error == ""){
 			echo "Success! Username is ".$email." and password is ".$password;
 			$password_hash = hash("sha512", $password);
+				$stmt = $mysqli->prepare("SELECT id, email FROM Users WHERE email=? AND password=?");
+				$stmt->bind_param("ss", $email, $password_hash);
+				
+				$stmt->bind_result($id_from_db, $email_from_db);
+				$stmt->execute();
+				
+				if($stmt->fetch()){
+					echo "<br>";
+					echo"Kasutaja id=".$id_from_db;
+				}else{
+					
+					echo "<br>";
+					echo "Wrong password or email!";
+					
+				}
+				
+				$stmt->close();
+
+			
+			
+			
+
 		}
 	} 
    if(isset($_POST["create"])){
@@ -72,10 +94,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 		if(	$create_email_error == "" && $create_password_error == "" && $create_password_again_error == ""){
-			echo "Success!";
+			echo "Võib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
 			$password_hash = hash("sha512", $create_password);
-			echo "<br>";
-			echo "Welcome ", $create_email, "!";
+				echo "<br>";
+				echo $password_hash;
+			
+			
 			
 			$stmt = $mysqli->prepare("INSERT INTO Users (email, password) VALUE (?, ?)");
 			$stmt->bind_param("ss", $create_email, $password_hash);
